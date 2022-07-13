@@ -17,3 +17,9 @@ Route::prefix('auth')->as('auth:')->group(function () {
     Route::post('/login', App\Http\Controllers\Api\Auth\LoginController::class)->name('login');
     Route::post('/signin', App\Http\Controllers\Api\Auth\SignInController::class)->name('signin');
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('transactions')->as('transactions:')->group(function () {
+        Route::post('/transfer', App\Http\Controllers\Api\Transactions\TransferController::class)->name('transfer');
+    });
+});

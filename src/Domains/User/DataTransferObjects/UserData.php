@@ -33,15 +33,13 @@ final class UserData implements DataTransferObjectContract
      */
     public static function fromRequest(StoreRequest $request): UserData
     {
-        $payload = $request->validated();
-
         return new UserData(
-            firstName: $payload['first_name'],
-            lastName: $payload['last_name'],
-            profile: $payload['profile'],
-            email: $payload['email'],
-            document: $payload['document'],
-            password: $payload['password']
+            firstName: $request['first_name'],
+            lastName: $request['last_name'],
+            profile: $request['profile'],
+            email: $request['email'],
+            document: $request['document'],
+            password: $request['password']
         );
     }
 

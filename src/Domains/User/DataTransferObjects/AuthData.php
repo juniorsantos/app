@@ -25,9 +25,7 @@ final class AuthData implements DataTransferObjectContract
      */
     public static function fromRequest(AuthRequest $request): AuthData
     {
-        $payload = $request->validated();
-
-        return new AuthData($payload['email'], $payload['password']);
+        return new AuthData($request['email'], $request['password']);
     }
 
     /**

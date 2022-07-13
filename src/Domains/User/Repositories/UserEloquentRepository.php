@@ -27,6 +27,8 @@ class UserEloquentRepository implements UserRepositoryContract
 
     public function create(array $payload): ?object
     {
-        return $this->model->query()->create($payload);
+        $user = $this->model->query()->create($payload);
+        $user->wallet()->create([]);
+        return $user;
     }
 }

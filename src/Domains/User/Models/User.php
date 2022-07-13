@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Domains\User\Models;
 
-use Attribute;
 use Domains\Shared\Models\Concerns\HasUuid;
+use Domains\Transaction\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -17,6 +19,7 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasUuid;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -80,4 +83,13 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    /**
+     * @return HasOne
+     */
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
 }

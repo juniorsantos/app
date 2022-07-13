@@ -33,6 +33,12 @@ RUN docker-php-ext-install \
     xml \
     zip \
     intl
+RUN pecl install xdebug
+
+COPY ./config/php.ini "${PHP_INI_DIR}"
+COPY ./config/docker-php-ext-xdebug.ini "${PHP_INI_DIR}/conf.d"
+
+RUN docker-php-ext-enable xdebug
 
 # Install Composer from Official Docker Image
 # https://hub.docker.com/_/composer

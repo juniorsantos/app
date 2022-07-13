@@ -12,7 +12,7 @@ test:
 	@docker exec $(PROJECT_NAME)_php php artisan test
 
 coverage:
-	@docker exec $(PROJECT_NAME)_php ./vendor/bin/pest --coverage
+	@docker exec $(PROJECT_NAME)_php ./vendor/bin/phpunit --coverage-html reports/
 
 migrate:
 	@docker exec $(PROJECT_NAME)_php php artisan migrate

@@ -6,6 +6,8 @@ services:
     build:
       context: ./docker/nginx
       dockerfile: Dockerfile
+    environment:
+        PHP_IDE_CONFIG: "serverName=app.local"
     depends_on:
       - app
     volumes:

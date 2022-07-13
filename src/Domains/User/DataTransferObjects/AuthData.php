@@ -6,16 +6,19 @@ namespace Domains\User\DataTransferObjects;
 
 use App\Http\Requests\Users\AuthRequest;
 use Infrastructure\Contracts\DTO\DataTransferObjectContract;
-use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class AuthData extends DataTransferObject implements DataTransferObjectContract
+final class AuthData implements DataTransferObjectContract
 {
-    /** @var string */
-    public string $email;
-
-    /** @var string */
-    public string $password;
+    /**
+     * @param string $email
+     * @param string $password
+     */
+    public function __construct(
+      public readonly string $email,
+      public readonly string $password,
+    ){
+    }
 
     /**
      * @throws UnknownProperties
@@ -24,10 +27,7 @@ class AuthData extends DataTransferObject implements DataTransferObjectContract
     {
         $payload = $request->validated();
 
-        return new self([
-            'email' => $payload['email'],
-            'password' => $payload['password'],
-        ]);
+        return new AuthData($payload['email'], $payload['password']);
     }
 
     /**

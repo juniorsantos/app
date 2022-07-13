@@ -4,31 +4,29 @@ declare(strict_types=1);
 
 namespace Domains\User\DataTransferObjects;
 
-use App\Http\Requests\Users\AuthRequest;
 use App\Http\Requests\Users\StoreRequest;
 use Infrastructure\Contracts\DTO\DataTransferObjectContract;
-use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class UserData extends DataTransferObject implements DataTransferObjectContract
+final class UserData implements DataTransferObjectContract
 {
-    /** @var string */
-    public string $firstName;
-
-    /** @var string */
-    public string $lastName;
-
-    /** @var string */
-    public string $profile;
-
-    /** @var string */
-    public string $email;
-
-    /** @var string */
-    public string $document;
-
-    /** @var string */
-    public string $password;
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $profile
+     * @param string $email
+     * @param string $document
+     * @param string $password
+     */
+    public function __construct(
+        public readonly string $firstName,
+        public readonly string $lastName,
+        public readonly string $profile,
+        public readonly string $email,
+        public readonly string $document,
+        public readonly string $password
+    ){
+    }
 
     /**
      * @throws UnknownProperties
@@ -37,14 +35,14 @@ class UserData extends DataTransferObject implements DataTransferObjectContract
     {
         $payload = $request->validated();
 
-        return new self([
-            'firstName' => $payload['first_name'],
-            'lastName' => $payload['last_name'],
-            'profile' => $payload['profile'],
-            'email' => $payload['email'],
-            'document' => $payload['document'],
-            'password' => $payload['password'],
-        ]);
+        return new UserData(
+            firstName: $payload['first_name'],
+            lastName: $payload['last_name'],
+            profile: $payload['profile'],
+            email: $payload['email'],
+            document: $payload['document'],
+            password: $payload['password']
+        );
     }
 
     /**

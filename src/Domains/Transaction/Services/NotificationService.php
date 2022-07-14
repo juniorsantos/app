@@ -27,7 +27,7 @@ class NotificationService
         try {
             $response = $this->client->request('GET', $endPoint);
             return json_decode($response->getBody(), true);
-        }catch (GuzzleException $exception){
+        } catch (GuzzleException $exception) {
             return ['not send'];
         }
     }

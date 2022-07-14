@@ -7,7 +7,6 @@ namespace Domains\User\Actions;
 use Domains\User\DataTransferObjects\UserData;
 use Domains\User\Exceptions\InvalidEmailPasswordException;
 use Domains\User\Repositories\UserEloquentRepository;
-use Illuminate\Support\Facades\Hash;
 
 final class CreateUserAction
 {

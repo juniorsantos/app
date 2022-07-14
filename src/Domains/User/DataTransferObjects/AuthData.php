@@ -15,9 +15,9 @@ final class AuthData implements DataTransferObjectContract
      * @param string $password
      */
     public function __construct(
-      public readonly string $email,
-      public readonly string $password,
-    ){
+        public readonly string $email,
+        public readonly string $password,
+    ) {
     }
 
     /**

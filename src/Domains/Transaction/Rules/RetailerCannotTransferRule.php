@@ -13,7 +13,7 @@ class RetailerCannotTransferRule
      */
     public function handle($passable, Closure $next)
     {
-        if($passable['payer_profile']===Profile::RETAILER->value) {
+        if ($passable['payer_profile']===Profile::RETAILER->value) {
             throw new RetailerCannotTransferException();
         }
         return $next($passable);

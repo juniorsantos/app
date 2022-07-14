@@ -24,7 +24,7 @@ class UserFactory extends Factory
         return [
             'first_name' => fake()->firstName,
             'last_name' => fake()->lastName,
-            'profile' => $arrayProfiles[rand(0,1)],
+            'profile' => $arrayProfiles[rand(0, 1)],
             'email' => fake()->safeEmail(),
             'document' => fake()->randomNumber(),
             'email_verified_at' => now(),

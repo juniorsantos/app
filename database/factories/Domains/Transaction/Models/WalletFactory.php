@@ -4,7 +4,6 @@ namespace Database\Factories\Domains\Transaction\Models;
 
 use Domains\Transaction\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Domains\User\Models\User>

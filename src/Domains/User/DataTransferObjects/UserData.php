@@ -25,7 +25,7 @@ final class UserData implements DataTransferObjectContract
         public readonly string $email,
         public readonly string $document,
         public readonly string $password
-    ){
+    ) {
     }
 
     /**

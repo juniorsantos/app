@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
         return [
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
-            'profile' => ['required', Rule::in( values: Profile::all())],
+            'profile' => ['required', Rule::in(values: Profile::all())],
             'email' => ['required', 'string', 'email','unique:users,email'],
             'document' => ['required', 'string'],
             'password' => ['required', 'string'],

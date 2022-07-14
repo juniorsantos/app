@@ -50,7 +50,7 @@ class WalletTransaction extends Model
      */
     public function walletPayee(): BelongsTo
     {
-          return $this->belongsTo(Wallet::class, 'payee_wallet_uuid', 'uuid');
+        return $this->belongsTo(Wallet::class, 'payee_wallet_uuid', 'uuid');
     }
 
     /**

@@ -15,6 +15,6 @@ class SendNotificationEvent
      */
     public function __construct(
         public WalletTransaction $walletTransaction
-    ){
+    ) {
     }
 }

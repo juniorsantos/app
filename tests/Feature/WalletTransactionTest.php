@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Domains\Transaction\Events\SendNotificationEvent;
 use Domains\Transaction\Models\Wallet;
 use Domains\User\Models\User;
 use Tests\TestCase;

@@ -12,7 +12,7 @@ class PayeeDoesNotExistRule
      */
     public function handle($passable, Closure $next)
     {
-        if(!$passable['payee']) {
+        if (!$passable['payee']) {
             throw new PayeeDoesNotExistException();
         }
         return $next($passable);

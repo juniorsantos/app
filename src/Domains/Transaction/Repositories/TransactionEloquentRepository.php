@@ -46,29 +46,29 @@ class TransactionEloquentRepository implements TransactionRepositoryContract
      */
     public function create(array $payload): ?object
     {
-      return DB::transaction(function () use ($payload){
-          $payeeWalletUuid = $this->userModel->query()
+        return DB::transaction(function () use ($payload) {
+            $payeeWalletUuid = $this->userModel->query()
               ->whereUuid($payload['payee_uuid'])
               ->first()->wallet->uuid;
-          $payerWalletUuid = Auth::user()->wallet->uuid;
+            $payerWalletUuid = Auth::user()->wallet->uuid;
 
-          $transaction = $this->walletTransactionModel->query()->create([
+            $transaction = $this->walletTransactionModel->query()->create([
               'payee_wallet_uuid' => $payeeWalletUuid,
               'payer_wallet_uuid' => $payerWalletUuid,
               'value' => $payload['value'],
           ]);
 
-          if(!$this->isAuthorizeTransaction()) {
-              throw new UnauthorizedTransactionException();
-          }
+            if (!$this->isAuthorizeTransaction()) {
+                throw new UnauthorizedTransactionException();
+            }
 
-          $transaction->walletPayer->withdraw($payload['value']);
-          $transaction->walletPayee->deposit($payload['value']);
+            $transaction->walletPayer->withdraw($payload['value']);
+            $transaction->walletPayee->deposit($payload['value']);
 
 //          event(new SendNotificationEvent($transaction));
 
-          return $transaction->walletPayer;
-      });
+            return $transaction->walletPayer;
+        });
     }
 
     public function isAuthorizeTransaction(): bool

@@ -15,9 +15,9 @@ final class TransferValueData implements DataTransferObjectContract
      * @param float $value
      */
     public function __construct(
-      public readonly string $document,
-      public readonly float $value,
-    ){
+        public readonly string $document,
+        public readonly float $value,
+    ) {
     }
 
     /**

@@ -12,7 +12,7 @@ class CannotTransferYourselfRule
      */
     public function handle($passable, Closure $next)
     {
-        if($passable['payee_uuid']===$passable['payer_uuid']) {
+        if ($passable['payee_uuid']===$passable['payer_uuid']) {
             throw new CannotTransferYourselfException();
         }
         return $next($passable);

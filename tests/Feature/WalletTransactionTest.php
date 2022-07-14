@@ -2,139 +2,114 @@
 
 namespace Tests\Feature;
 
+use Domains\Transaction\Events\SendNotificationEvent;
+use Domains\Transaction\Models\Wallet;
 use Domains\User\Models\User;
 use Tests\TestCase;
 
-class AuthTest extends TestCase
+class WalletTransactionTest extends TestCase
 {
-    protected User $user;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
-    public function canUserLogin()
+    public function testRetailerShouldNotTransfer()
     {
+        $userRetailer = $this->userRetailer();
+
         $payload = [
-            'email' => $this->user->email,
-            'password' => 'password',
+            'document' => '9090',
+            'value' => 123
         ];
 
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertStatus(200);
+        $request = $this->actingAs($userRetailer)
+            ->post('/api/transactions/transfer', $payload);
+        $request
+            ->assertStatus(422)
+            ->assertJsonStructure(['message']);
     }
 
-    /**
-     * @test
-     */
-    public function withoutEmail()
+    public function testUserShouldTransferToRetailer()
     {
+        $userRetailer = $this->userRetailer();
+        $user = $this->user();
+
         $payload = [
-            'email' => 'qualquer.um@mail.com',
-            'password' => 'password',
+            'document' => $userRetailer->document,
+            'value' => 12
         ];
 
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertStatus(422);
+        $request = $this->actingAs($user)
+            ->post('/api/transactions/transfer', $payload);
+        $request
+            ->assertStatus(201)
+            ->assertJsonStructure(['uuid','balance']);
+    }
+    public function testUserShouldByFundsForTransferToRetailer()
+    {
+        $userRetailer = $this->userRetailer();
+        $user = $this->user(0);
+
+        $payload = [
+            'document' => $userRetailer->document,
+            'value' => 12
+        ];
+
+        $request = $this->actingAs($user)
+            ->post('/api/transactions/transfer', $payload);
+        $request
+            ->assertStatus(422)
+            ->assertJsonStructure(['message']);
     }
 
-    /**
-     * @test
-     */
-    public function cantNotWithoutLogin()
+    public function testUserCanTransferMoney()
     {
+        $userRetailer = $this->userRetailer();
+        $user = $this->user();
+
         $payload = [
-            'email' => $this->user->email,
-            'password' => 'passwordSD',
+            'document' => $userRetailer->document,
+            'value' => 1000
         ];
 
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertStatus(422);
+        $request = $this->actingAs($user)
+            ->post('/api/transactions/transfer', $payload);
+        $request
+            ->assertStatus(201)
+            ->assertJsonStructure(['uuid','balance']);
     }
 
-    /**
-     * @test
-     */
-    public function aAuthRequireEmail()
+    public function userRetailer()
     {
-        $payload = [
-            'email' => '',
-            'password' => 'passwordSD',
-        ];
+        $userRetailer = User::factory()->create([
+            'first_name' => 'Retailer',
+            'last_name' => 'Test',
+            'profile' => 'retailer',
+            'email' => 'retailer@test.com',
+            'document' => '9090',
+        ]);
+        Wallet::factory()->create([
+            'user_id' => $userRetailer->id,
+            'balance' => 0,
+        ]);
 
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertSessionHasErrors(['email']);
+        return $userRetailer;
     }
 
-    /**
-     * @test
-     */
-    public function aAuthRequireValidEmail()
+    public function user($balance=3000)
     {
-        $payload = [
-            'email' => 'adminadmin',
-            'password' => 'passwordSD',
-        ];
-
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertSessionHasErrors(['email']);
-    }
-
-    /**
-     * @test
-     */
-    public function aAuthRequirePassword()
-    {
-        $payload = [
-            'email' => 'admin@admin.com',
-            'password' => '',
-        ];
-
-        $response = $this->post('/api/auth/login', $payload);
-        $response->assertSessionHasErrors(['password']);
-    }
-
-    /**
-     * @test
-     */
-    public function canSigninUser()
-    {
-        $payload = [
-            "first_name" => "admin",
-            "last_name"=> "Geral",
-            "profile"=> "user",
-            "email" => "admin@dasdasdaasdas.com",
-            "document" => "aaaasdasdasda",
-            "password" => "admin",
-            "password_confirmation" => "admin",
-        ];
-
-        $response = $this->post('/api/auth/signin', $payload);
-        $response->assertStatus(201);
-    }
-
-    /**
-     * @test
-     */
-    public function cannotSigninInvalidProfile()
-    {
-        $payload = [
-            "first_name" => "admin",
-            "last_name"=> "Geral",
-            "profile"=> "admin",
-            "email" => "admin@dasdasdaasdas.com",
-            "document" => "aaaasdasdasda",
-            "password" => "admin",
-            "password_confirmation" => "admin",
-        ];
-
-        $response = $this->post('/api/auth/signin', $payload);
-        $response->assertSessionHasErrors(['profile']);
+        $user = User::factory()->create([
+            'first_name' => 'User',
+            'last_name' => 'Test',
+            'profile' => 'user',
+            'email' => 'user@test.com',
+            'document' => '9191',
+        ]);
+        Wallet::factory()->create([
+            'user_id' => $user->id,
+            'balance' => $balance,
+        ]);
+        return $user;
     }
 }

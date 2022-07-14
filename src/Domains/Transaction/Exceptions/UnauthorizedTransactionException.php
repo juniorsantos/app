@@ -6,12 +6,12 @@ namespace Domains\Transaction\Exceptions;
 
 use Illuminate\Http\JsonResponse;
 
-class CannotTransferYourselfException extends \Exception
+class UnauthorizedTransactionException extends \Exception
 {
     public function render(): JsonResponse
     {
         return response()->json([
-                'message' => 'Cannot Transfer Yourself',
+                'message' => 'Unauthorized transaction',
         ], 422);
     }
 }

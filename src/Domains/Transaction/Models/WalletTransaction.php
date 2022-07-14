@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domains\Transaction\Models;
 
 use Domains\Shared\Models\Concerns\HasUuid;
+use Domains\Transaction\Events\SendNotificationEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,11 @@ class WalletTransaction extends Model
     use HasUuid;
     use HasFactory;
     use SoftDeletes;
+
+    protected $dispatchesEvents = [
+        'created' => SendNotificationEvent::class,
+    ];
+
 
     /**
      * The attributes that are mass assignable.

@@ -2,8 +2,11 @@
 
 namespace Domains\Transaction\Repositories;
 
+use Domains\Transaction\Events\SendNotificationEvent;
+use Domains\Transaction\Exceptions\UnauthorizedTransactionException;
 use Domains\Transaction\Models\Wallet;
 use Domains\Transaction\Models\WalletTransaction;
+use Domains\Transaction\Services\AuthorizationTransactionService;
 use Domains\User\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -63,10 +66,22 @@ class TransactionEloquentRepository implements TransactionRepositoryContract
               'value' => $payload['value'],
           ]);
 
+          if(!$this->isAuthorizeTransaction()) {
+              throw new UnauthorizedTransactionException();
+          }
+
           $transaction->walletPayer->withdraw($payload['value']);
           $transaction->walletPayee->deposit($payload['value']);
 
+//          event(new SendNotificationEvent($transaction));
+
           return $transaction->walletPayer;
       });
+    }
+
+    public function isAuthorizeTransaction(): bool
+    {
+        $service = new AuthorizationTransactionService();
+        return $service->authorize()['message']== 'Autorizado';
     }
 }

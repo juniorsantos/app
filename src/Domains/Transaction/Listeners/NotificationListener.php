@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Listeners;
+namespace Domains\Transaction\Listeners;
 
 use App\Events\OrderPlaced;
+use Domains\Transaction\Events\SendNotification;
+use Domains\Transaction\Services\NotificationService;
 use Illuminate\Support\Facades\Artisan;
 
-class CreateOrder
+class NotificationListener
 {
   /**
    * Create the event listener.
@@ -17,17 +19,13 @@ class CreateOrder
     //
   }
 
-  /**
-   * Handle the event.
-   *
-   * @param OrderPlaced $event
-   * @return void
-   */
-  public function handle(OrderPlaced $event)
-  {
-    Artisan::call('order:get', [
-      '--channel-id' => $event->orderHook->channel_id,
-      '--order' => $event->orderHook->order_number
-    ]);
-  }
+    /**
+     * @param SendNotification $event
+     *
+     * @return void
+     */
+    public function handle(SendNotification $event)
+    {
+      app(NotificationService::class)->notifyUser($event->walletTransaction->wallet->user->uuid);
+    }
 }

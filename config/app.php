@@ -199,6 +199,7 @@ return [
          * Domains Repository Providers
          */
         Domains\User\Providers\UserRepositoryProvider::class,
+        Domains\Transaction\Providers\TransactionRepositoryProvider::class,
     ],
 
     /*

@@ -44,14 +44,6 @@ class TransactionEloquentRepository implements TransactionRepositoryContract
     /**
      * @inheritDoc
      */
-    public function find($attribute, $value): ?object
-    {
-        // TODO: Implement find() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function create(array $payload): ?object
     {
       return DB::transaction(function () use ($payload){

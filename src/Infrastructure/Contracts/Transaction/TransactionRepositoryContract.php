@@ -7,12 +7,18 @@ namespace Infrastructure\Contracts\Transaction;
 interface TransactionRepositoryContract
 {
     /**
-     * @param $attribute
-     * @param $value
+     * @param $document
      *
      * @return object|null
      */
-    public function find($attribute, $value): ?object;
+    public function getPayeeByDocument($document): ?object;
+
+    /**
+     * @param $userId
+     *
+     * @return object|null
+     */
+    public function getWalletByUserId($userId): ?object;
 
     /**
      * @param array $payload
@@ -20,4 +26,9 @@ interface TransactionRepositoryContract
      * @return object|null
      */
     public function create(array $payload): ?object;
+
+    /**
+     * @return bool
+     */
+    public function isAuthorizeTransaction(): bool;
 }
